@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>RAZA — Personal AI Assistant | Learn With Software Engineer</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  :root{
+    --bg:#071127; --card:#0b1220; --muted:#9aa4b2; --accent:#06b6d4; --accent-2:#7c3aed; --glass:rgba(255,255,255,0.03);
+    --radius:12px; font-family:Inter,system-ui,Segoe UI,Roboto,Arial; color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:0;background:linear-gradient(180deg,var(--bg),#041028 140%);color:#e6eef6;min-height:100vh}
+  .wrap{width:100%;max-width:100%;padding:20px}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:grid;place-items:center;font-weight:700;color:#001219}
+  h1{margin:0;font-size:18px}
+  .subtitle{font-size:13px;color:var(--muted)}
+  .top-actions{margin-left:auto;display:flex;gap:8px}
+  .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.03);color:inherit;padding:8px 12px;border-radius:10px;cursor:pointer}
+  .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#001219;border:none}
+  .layout{display:grid;grid-template-columns:360px 1fr 380px;gap:18px;max-width:1400px;margin:0 auto}
+  @media(max-width:1200px){.layout{grid-template-columns:1fr;max-width:100%}}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)}
+  .small{font-size:13px;color:var(--muted)}
+  .profile-pic{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent-2),var(--accent));display:grid;place-items:center;font-weight:700;color:#001219}
+  .skills{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .chip{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:999px;font-size:13px;color:var(--muted)}
+  .search-input{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:rgba(0,0,0,0.25);color:inherit}
+  .projects-list{margin-top:10px;display:grid;gap:8px}
+  .project-item{padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);cursor:pointer}
+  .assistant-area{display:flex;flex-direction:column;height:76vh}
+  .assistant-chat{flex:1;overflow:auto;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(0,0,0,0.03), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.02)}
+  .msg{margin-bottom:12px;display:flex;gap:8px}
+  .msg.ai .bubble{background:rgba(255,255,255,0.03);padding:10px;border-radius:10px;color:#e6eef6}
+  .msg.me{justify-content:flex-end}
+  .msg.me .bubble{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#001219;padding:10px;border-radius:10px}
+  .assistant-controls{display:flex;gap:8px;margin-top:8px}
+  .right-col{display:flex;flex-direction:column;gap:12px}
+  .chart-wrap{height:160px;padding:8px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));display:flex;align-items:center}
+  .search-results{margin-top:10px;max-height:200px;overflow:auto}
+  pre.code{background:#021627;padding:10px;border-radius:8px;color:#dbeafe;overflow:auto}
+  .copy-btn{font-size:12px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.03);cursor:pointer}
+  /* modal backdrops */
+  .modal-backdrop{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,0.6);z-index:80;padding:18px}
+  .modal{max-width:760px;width:100%;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:16px;border-radius:12px}
+  
+  /* Ensure dropdown works properly */
+  .dropdown-menu {
+    background-color: #071127 !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+  }
+  .dropdown-item {
+    color: #ecf0f1 !important;
+    padding: 8px 16px !important;
+  }
+  .dropdown-item:hover {
+    background-color: rgba(255,255,255,0.1) !important;
+    color: #3498db !important;
+  }
+  .dropdown-item.active {
+    background-color: #3498db !important;
+    color: white !important;
+  }
+</style>
+</style>
+
+    <!-- Kondee AI Chatbot -->
+    <link rel="stylesheet" href="chatbot.css">
+    <script src="chatbot-data.js"></script>
+    <script src="chatbot.js"></script>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #071127;">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-code"></i> Learn With Software Engineer
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="services.html">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="category.html">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog.html">Blog</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="portfolioDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Portfolio
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="portfolioDropdown">
+                            <li><a class="dropdown-item" href="data-science.html">Data Science</a></li>
+                            <li><a class="dropdown-item" href="data-analyst.html">Data Analyst</a></li>
+                            <li><a class="dropdown-item active" href="app.html">AI Assistant</a></li>
+                            <li><a class="dropdown-item" href="portofolo.html">Project</a></li>
+                            <li><a class="dropdown-item" href="my-pdf.html">My PDFs</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+  <div class="wrap">
+    <header>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="logo">RZ</div>
+        <div>
+          <h1>RAZA — Personal AI Assistant</h1>
+          <div class="subtitle">AI chatbot about Raza, Learn With Software Engineer, courses, and projects</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn" id="openProfile">📋 Profile</button>
+        <button class="btn primary" id="openAssistant">💬 Open Chat</button>
+        <button class="btn" id="exportAll">📥 Export</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- Left: Profile & Projects -->
+      <aside class="card">
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="profile-pic" id="leftAvatar">RZ</div>
+          <div>
+            <div id="leftName" style="font-weight:700">RAZA Software Engineer</div>
+            <div class="small" id="leftRegion">Peshawar / Bannu area</div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px">
+          <div class="small">Skills & Expertise</div>
+          <div class="skills" id="leftSkills"></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="small">Featured Courses</div>
+          <input class="search-input" id="projectSearch" placeholder="Search projects..." />
+          <div class="projects-list" id="projectsList"></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="small">Actions</div>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <button class="btn" id="newProject">➕ New</button>
+            <button class="btn" id="importData">📂 Import</button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center: Assistant Chat -->
+      <section class="card assistant-area">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <div>
+            <strong>RAZA's Personal AI Assistant</strong>
+            <div class="small">Ask about Learn With Software Engineer, Data Science/Analyst courses, Raza's background, or request code help.</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="globalQuery" placeholder="Search across all content..." class="search-input" style="min-width:260px" />
+            <button class="btn" id="searchAllBtn">Search</button>
+          </div>
+        </div>
+
+        <div class="assistant-chat" id="chatWindow" aria-live="polite"></div>
+
+        <div style="margin-top:8px;display:flex;gap:8px">
+          <input id="chatInput" placeholder="Ask about courses, projects, or request code (e.g., 'Data Science courses', 'My goals', 'Sample code')" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:rgba(0,0,0,0.25)" />
+          <button class="btn primary" id="sendBtn">Send</button>
+        </div>
+
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="btnIdea">💡 Project Idea</button>
+          <button class="btn" id="btnPlan">📅 30-Day Plan</button>
+          <button class="btn" id="btnCode">💻 Sample Code</button>
+          <button class="btn" id="btnProfileQA">👤 About Raza</button>
+        </div>
+      </section>
+
+      <!-- Right: Results, Chart, Code panel -->
+      <aside class="card right-col">
+        <div>
+          <div class="small">🔍 Search Results</div>
+          <div class="search-results" id="searchResults"></div>
+        </div>
+
+        <div>
+          <div class="small">📊 Topics by Tag</div>
+          <div class="chart-wrap"><canvas id="rightChart"></canvas></div>
+        </div>
+
+        <div>
+          <div class="small">💻 Code Snippets</div>
+          <div id="codePanel"><div class="small" style="color:var(--muted)">No code generated yet</div></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="modal-backdrop" id="profileModal" role="dialog" aria-hidden="true">
+    <div class="modal" role="document">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3>👤 Edit Profile</h3>
+        <div style="display:flex;gap:8px"><button class="btn" id="closeProfileBtn">Close</button></div>
+      </div>
+      <form id="profileForm" style="margin-top:10px">
+        <div style="display:flex;gap:8px">
+          <input id="f_name" placeholder="Full Name" style="flex:1;padding:8px;border-radius:8px" />
+          <input id="f_region" placeholder="Region/Location" style="flex:1;padding:8px;border-radius:8px" />
+        </div>
+        <div style="margin-top:8px"><input id="f_skills" placeholder="Skills (comma separated - e.g. Python, JavaScript, Data Science)" style="width:100%;padding:8px;border-radius:8px" /></div>
+        <div style="margin-top:8px"><input id="f_goals" placeholder="Goals (comma separated)" style="width:100%;padding:8px;border-radius:8px" /></div>
+        <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn" id="resetProfileBtn">🔄 Reset</button>
+          <button class="btn primary" id="saveProfileBtn">💾 Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Project Modal -->
+  <div class="modal-backdrop" id="projectModal" role="dialog" aria-hidden="true">
+    <div class="modal" role="document">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 id="projModalTitle">📚 Add New Course/Project</h3>
+        <div style="display:flex;gap:8px"><button class="btn" id="closeProjectBtn">Close</button></div>
+      </div>
+      <form id="projForm" style="margin-top:10px">
+        <div style="display:flex;gap:8px">
+          <input id="projTitle" placeholder="Title" style="flex:1;padding:8px;border-radius:8px" />
+          <input id="projTags" placeholder="Tags (comma separated - e.g. Python, Web Dev)" style="flex:1;padding:8px;border-radius:8px" />
+        </div>
+        <div style="margin-top:8px"><textarea id="projDesc" placeholder="Short description of what you'll learn or build" style="width:100%;padding:8px;border-radius:8px" rows="4"></textarea></div>
+        <div style="margin-top:8px;display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn primary" id="saveProjectBtn">➕ Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+/* RAZA's Personal AI Assistant
+   Responds with information about:
+   - Raza (background, skills, goals)
+   - Learn With Software Engineer website
+   - Data Science & Data Analyst courses
+   - Project ideas and code samples
+   
+   Features:
+   - Local storage for chat history
+   - Profile management
+   - Course/project organization
+   - Search functionality
+   - Code snippet generation
+*/
+
+/* Utilities */
+const $ = s => document.querySelector(s);
+const uid = ()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const escapeHtml = s=>String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+
+/* Storage keys */
+const LS_PROFILE = 'raza_local_profile_v1';
+const LS_PROJECTS = 'raza_local_projects_v1';
+const LS_CHAT = 'raza_local_chat_v1';
+
+/* State */
+let profile = null;
+let projects = [];
+let chat = [];
+let chartInstance = null;
+
+/* Default profile (your provided info) */
+const defaultProfile = {
+  name: "RAZA Software Engineer",
+  region: "Pakistan (Peshawar / Bannu area)",
+  skills: ["Python","HTML","CSS","JavaScript","R (basic)","Responsive design","Data visualization","Web development","Machine Learning basics"],
+  goals: ["Build professional web apps","Master Data Science","Improve coding skills","Start freelancing","Create YouTube tutorials","Join Microsoft after MSc","Build personal AI assistant apps","Launch Learn With Software Engineer platform"],
+  preferences: "Clean, modern, well-structured code; mobile-first; reusable components",
+  learningStyle: "Step-by-step guidance",
+  education: "Pursuing MSc",
+  interests: ["Data Science","Web Development","AI/ML","Teaching others","Building platforms","YouTube content creation"],
+  website: {
+    name: "Learn With Software Engineer",
+    pages: ["Home","About","Services","Categories","Blog","Data Science","Data Analyst","Contact"],
+    dataScienceCourses: ["Python Basics for Data Science","NumPy Tutorial","Pandas Tutorial","Data Visualization with Matplotlib & Seaborn","Statistics for Data Science","Machine Learning Fundamentals","Scikit-learn Tutorial","Data Preprocessing & Cleaning","Feature Engineering","Time Series Analysis","Deep Learning with TensorFlow & Keras","Big Data with Spark & Hadoop"],
+    dataAnalystCourses: ["SQL for Data Analysis","Excel for Data Analysis","Data Visualization with Tableau & Power BI","Business Intelligence Fundamentals","Statistical Analysis for Analysts","Data Cleaning & Preparation","Python for Data Analysis","Google Analytics & Web Analytics","Data Storytelling & Communication","Advanced Excel Dashboard Creation","Advanced SQL & Database Design","Real-world Data Analysis Projects"],
+    mission: "Provide high-quality education in data science, programming, and software engineering"
+  }
+};
+
+/* Persistence */
+function saveProfile(){ localStorage.setItem(LS_PROFILE, JSON.stringify(profile)); }
+function saveProjects(){ localStorage.setItem(LS_PROJECTS, JSON.stringify(projects)); }
+function saveChat(){ localStorage.setItem(LS_CHAT, JSON.stringify(chat)); }
+function loadAll(){
+  profile = JSON.parse(localStorage.getItem(LS_PROFILE) || 'null') || defaultProfile;
+  projects = JSON.parse(localStorage.getItem(LS_PROJECTS) || 'null') || sampleProjects();
+  chat = JSON.parse(localStorage.getItem(LS_CHAT) || 'null') || [
+    { id: uid(), role:'ai', text:`Hello ${defaultProfile.name.split(' ')[0]} — I'm your personal AI assistant! 👋\n\nI can help you with:\n📚 Learn With Software Engineer courses (Data Science, Data Analyst)\n👨‍💻 Information about you and your projects\n💡 Project ideas and learning plans\n💻 Code snippets and tutorials\n🔍 Search across everything\n\nTry asking:\n• "Tell me about Data Science courses"\n• "What are my goals?"\n• "Suggest a project"\n• "Show me sample code"\n\nType a question or click "Ask Profile" to get started!`, time: Date.now() }
+  ];
+  saveProfile(); saveProjects(); saveChat();
+}
+
+/* Sample projects */
+function sampleProjects(){
+  const s = [
+    { id: uid(), title:'Personal Portfolio', tags:['portfolio','responsive','css'], description:'Showcase and case studies', created:Date.now() },
+    { id: uid(), title:'Interactive Dashboard', tags:['dashboard','charts','javascript'], description:'Business metrics dashboard', created:Date.now() },
+    { id: uid(), title:'Mini Game: Puzzle', tags:['game','canvas','js'], description:'Browser puzzle game', created:Date.now() }
+  ];
+  localStorage.setItem(LS_PROJECTS, JSON.stringify(s));
+  return s;
+}
+
+/* Rendering functions (robust) */
+function renderLeftProfile(){
+  $('#leftAvatar').textContent = (profile.name||'RZ').split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
+  $('#leftName').textContent = profile.name;
+  $('#leftRegion').textContent = profile.region;
+  const ks = $('#leftSkills'); ks.innerHTML='';
+  (profile.skills||[]).forEach(s=>{
+    const d = document.createElement('div'); d.className='chip'; d.textContent=s; ks.appendChild(d);
+  });
+}
+function renderProjectsList(filter=''){
+  const list = $('#projectsList'); list.innerHTML='';
+  projects.filter(p=> (p.title+' '+p.description+' '+(p.tags||[]).join(' ')).toLowerCase().includes(filter.toLowerCase())).forEach(p=>{
+    const el = document.createElement('div'); el.className='project-item'; el.innerHTML = `<strong>${escapeHtml(p.title)}</strong><div class="small">${escapeHtml((p.tags||[]).join(', '))}</div>`;
+    el.addEventListener('click', ()=> openProjectQA(p.id));
+    list.appendChild(el);
+  });
+}
+function renderChatWindow(){
+  const w = $('#chatWindow'); if(!w) return;
+  w.innerHTML='';
+  chat.forEach(m=>{
+    const div = document.createElement('div'); div.className='msg '+(m.role==='me'?'me':'ai');
+    const b = document.createElement('div'); b.className='bubble';
+    b.innerHTML = `<div style="white-space:pre-wrap">${escapeHtml(m.text)}</div><div class="small" style="margin-top:6px;color:var(--muted)">${new Date(m.time).toLocaleString()}</div>`;
+    div.appendChild(b); w.appendChild(div);
+  });
+  w.scrollTop = w.scrollHeight;
+}
+function renderChart(){
+  const ctx = document.getElementById('rightChart').getContext('2d');
+  const tags = aggregateTags();
+  const labels = tags;
+  const data = labels.map(l => projects.filter(p=> (p.tags||[]).includes(l)).length);
+  if(chartInstance) try{ chartInstance.destroy(); }catch(e){}
+  chartInstance = new Chart(ctx, { type:'doughnut', data:{ labels, datasets:[{ data, backgroundColor:['#06b6d4','#7c3aed','#10b981','#f59e0b','#ef4444'] }] }, options:{plugins:{legend:{display:labels.length>0}}}});
+}
+function renderSearchResults(results){
+  const el = $('#searchResults'); if(!el) return;
+  el.innerHTML='';
+  if(results.length===0){ el.innerHTML = '<div class="small" style="color:var(--muted)">No results</div>'; return; }
+  results.forEach(r=>{
+    const div = document.createElement('div'); div.style.padding='8px'; div.style.borderRadius='8px'; div.style.marginBottom='8px'; div.style.background='rgba(255,255,255,0.02)';
+    if(r.type==='project'){
+      div.innerHTML = `<strong>${escapeHtml(r.title)}</strong><div class="small">${escapeHtml((r.tags||[]).join(', '))}</div><div style="margin-top:6px">${escapeHtml(r.description)}</div>`;
+      div.addEventListener('click', ()=> openProjectQA(r.id));
+    } else if(r.type==='chat'){
+      div.innerHTML = `<div class="small" style="color:var(--muted)">${new Date(r.time).toLocaleString()}</div><div style="margin-top:6px;white-space:pre-wrap">${escapeHtml(r.text)}</div>`;
+    } else if(r.type==='profile'){
+      div.innerHTML = `<strong>Profile</strong><div class="small">${escapeHtml(r.field)}: ${escapeHtml(r.value)}</div>`;
+    }
+    el.appendChild(div);
+  });
+}
+
+/* Helpers */
+function aggregateTags(){ const s=new Set(); projects.forEach(p=> (p.tags||[]).forEach(t=>s.add(t))); return Array.from(s); }
+
+/* Modal handling and robust openAssistant */
+function openProfileModal(){ $('#profileModal').style.display='grid'; $('#profileModal').setAttribute('aria-hidden','false'); $('#f_name').focus(); $('#f_name').value = profile.name || ''; $('#f_region').value = profile.region || ''; $('#f_skills').value = (profile.skills||[]).join(', '); $('#f_goals').value = (profile.goals||[]).join(', '); }
+function closeProfileModal(){ $('#profileModal').style.display='none'; $('#profileModal').setAttribute('aria-hidden','true'); }
+function openProjectModal(){ $('#projectModal').style.display='grid'; $('#projectModal').setAttribute('aria-hidden','false'); $('#projTitle').value=''; $('#projTags').value=''; $('#projDesc').value=''; $('#projTitle').focus(); }
+function closeProjectModal(){ $('#projectModal').style.display='none'; $('#projectModal').setAttribute('aria-hidden','true'); }
+
+/* Project QA: open chat with project context */
+function openProjectQA(id){
+  const p = projects.find(x=>x.id===id);
+  if(!p) return;
+  appendChat('me', `Tell me about project: ${p.title}`);
+  setTimeout(()=> {
+    const resp = `Project: ${p.title}\nTags: ${(p.tags||[]).join(', ')}\nDescription: ${p.description}\nCreated: ${new Date(p.created).toLocaleDateString()}\n\nSuggested next steps:\n1) Add a case study section\n2) Add deployment link\n3) Create a short video walkthrough demonstrating features.`;
+    appendChat('ai', resp);
+    openAssistantModal(); // ensure assistant is visible when opening project QA
+  }, 220);
+}
+
+/* Chat handling */
+function appendChat(role, text){
+  const m = { id: uid(), role, text, time: Date.now() };
+  chat.push(m); saveChat(); renderChatWindow();
+}
+function generateReply(userText){
+  const t = userText.toLowerCase();
+
+  // Ensure profile has website data (fallback)
+  if(!profile.website){
+    profile.website = defaultProfile.website;
+  }
+  if(!profile.skills){
+    profile.skills = defaultProfile.skills;
+  }
+  if(!profile.goals){
+    profile.goals = defaultProfile.goals;
+  }
+
+  // Direct course/project questions (check first with broader patterns)
+  if(/(\bcourse|curriculum|learning path|what.*learn|\bteach|training|what do you teach)/.test(t)){
+    if(/data science|python|ml|machine learning|deep learning|tensor|numpy|pandas|science|ai|artificial intelligence/.test(t)){
+      const courses = profile.website && profile.website.dataScienceCourses ? profile.website.dataScienceCourses : defaultProfile.website.dataScienceCourses;
+      return `📚 Data Science with Python\n\nRaza's comprehensive Data Science learning path includes:\n1. ${courses[0]}\n2. ${courses[1]}\n3. ${courses[2]}\n4. ${courses[3]}\n5. ${courses[4]}\n6. ${courses[5]}\n\n...and 6 more advanced courses:\n7. ${courses[6]}\n8. ${courses[7]}\n9. ${courses[8]}\n10. ${courses[9]}\n11. ${courses[10]}\n12. ${courses[11]}\n\nVisit the Data Science page to get started!`;
+    }
+    if(/analyst|sql|excel|business intelligence|bi|tableau|power bi|analytics|data analytics/.test(t)){
+      const courses = profile.website && profile.website.dataAnalystCourses ? profile.website.dataAnalystCourses : defaultProfile.website.dataAnalystCourses;
+      return `📊 Data Analyst Learning Path\n\nRaza offers the following Data Analyst courses:\n1. ${courses[0]}\n2. ${courses[1]}\n3. ${courses[2]}\n4. ${courses[3]}\n5. ${courses[4]}\n6. ${courses[5]}\n\n...and 6 more specialized courses:\n7. ${courses[6]}\n8. ${courses[7]}\n9. ${courses[8]}\n10. ${courses[9]}\n11. ${courses[10]}\n12. ${courses[11]}\n\nVisit the Data Analyst page to explore!`;
+    }
+    // Generic course response if no specific match
+    return `📚 Raza's Courses\n\nRaza's Learn With Software Engineer platform offers two main learning paths:\n\n📊 Data Science with Python (12 courses)\n- Python fundamentals, NumPy, Pandas, Visualization\n- Machine Learning, Deep Learning, Big Data, and more\n\n📈 Data Analyst Training (12 courses)\n- SQL, Excel, Tableau & Power BI\n- Business Intelligence, Google Analytics, and more\n\nAsk me about "Data Science" or "Data Analyst" for the complete course list!`;
+  }
+
+  // Website questions
+  if(/website|learn with software engineer|pages|navigation|index|html/.test(t)){
+    const website = profile.website || defaultProfile.website;
+    if(/pages|navigation|structure|site map/i.test(t)){
+      return `🌐 Website Pages\n\nLearn With Software Engineer has the following pages:\n- Home (index.html) - Welcome & overview\n- About - About Raza and the platform\n- Services - What we offer\n- Categories - Course categories\n- Blog - Articles and tutorials\n- Data Science - 12 comprehensive courses\n- Data Analyst - 12 specialized courses\n- Contact - Get in touch\n\nVisit the website to explore all resources!`;
+    }
+    if(/about|mission|purpose|what is/.test(t)){
+      return `ℹ️ About Learn With Software Engineer:\n\n${website.mission}\n\nCreated by: ${profile.name}\nLocation: ${profile.region}\n\nThe platform combines practical web development with data science education to help students and professionals master in-demand skills.`;
+    }
+    return `📖 Learn With Software Engineer\n\nRaza's educational platform offers:\n✓ Data Science courses (Python, ML, Deep Learning, Big Data)\n✓ Data Analyst training (SQL, Excel, BI tools, Analytics)\n✓ Web development resources\n✓ Professional portfolio projects\n\nAsk about "Data Science", "Data Analyst", or "website pages"!`;
+  }
+
+  // About Raza/Profile questions
+  if(/raza|about me|who are you|who.*raza|profile|background|creator|author/.test(t)){
+    const skills = profile.skills || defaultProfile.skills;
+    const goals = profile.goals || defaultProfile.goals;
+    const interests = profile.interests || defaultProfile.interests;
+    return `👨‍💻 About ${profile.name}\n\nLocation: ${profile.region}\nEducation: ${profile.education}\n\n🎯 Top Skills:\n${skills.slice(0,8).join(', ')}\n\n📍 Goals:\n${goals.slice(0,5).map((g,i)=>`${i+1}. ${g}`).join('\n')}\n\n💡 Interests: ${interests.join(', ')}\n\nRaza is building Learn With Software Engineer to teach others about web development, data science, and AI/ML. He's passionate about creating quality educational content and helping students succeed!`;
+  }
+
+  if(/skill|expertise|what.*can.*do|competency|ability|talented/.test(t)){
+    const skills = profile.skills || defaultProfile.skills;
+    return `🎯 Raza's Key Skills:\n\n${skills.map((s,i)=>`${i+1}. ${s}`).join('\n')}\n\nWith these skills, Raza specializes in:\n✓ Building responsive web applications\n✓ Data visualization and analysis\n✓ Python-based data science projects\n✓ Teaching programming concepts\n✓ Creating interactive dashboards\n✓ Web development with modern frameworks\n\nInterested in any particular skill?`;
+  }
+
+  if(/goal|future|plans|next|want|aspiration|target|dream/.test(t)){
+    const goals = profile.goals || defaultProfile.goals;
+    return `🚀 Future Plans & Goals:\n\n${goals.map((g,i)=>`${i+1}. ${g}`).join('\n')}\n\nRaza is currently focused on:\n→ Expanding Learn With Software Engineer\n→ Creating high-quality educational content\n→ Helping students master data science and web development\n→ Building a global learning community\n\nWhat would you like to know more about?`;
+  }
+
+  // Project-specific questions
+  if(/project|portfolio|work|built|created|showcase|example/i.test(t)){
+    const projMatch = projects.find(p => t.includes(p.title.toLowerCase()));
+    if(projMatch){
+      return `📁 Project: ${projMatch.title}\n\nTags: ${(projMatch.tags||[]).join(', ')}\nDescription: ${projMatch.description}\n\nSuggested improvements:\n✓ Integrate with Learn With Software Engineer platform\n✓ Add user authentication\n✓ Create detailed tutorial content\n✓ Deploy to production and share\n\nWould you like help building or improving this?`;
+    }
+    // Generic project response
+    return `💼 Raza's Projects\n\nRaza has various projects including:\n✓ Personal websites and portfolios\n✓ Interactive dashboards\n✓ Data science applications\n✓ Web development showcases\n\nClick on Individual projects in the left panel to learn more, or ask about a specific project name!`;
+  }
+
+  // Intent patterns
+  if(/suggest|idea|project|build|create/.test(t)){
+    const idea = generateProjectIdea();
+    return `💡 Project Idea: ${idea.title}\n\n${idea.summary}\n\nTech Stack: ${idea.stack.join(', ')}\n\nWhy it fits Raza: ${idea.why}\n\nWould you like starter code or a 30-day plan to build this?`;
+  }
+
+  if(/30-day|30 day|plan|schedule|roadmap|timeline/.test(t)){
+    return `📅 30-Day Learning & Building Plan:\n\n` + generate30DayPlan().map((s,i)=>`Day ${(i*7)+1}-${(i+1)*7}: ${s}`).join('\n');
+  }
+
+  if(/code|snippet|sample|example/.test(t)){
+    const code = generateSampleCode();
+    showCodeInPanel(code);
+    return `💻 Sample Code Generated!\n\nI've created a reusable component example in the Code panel (right side).\n\nFeatures:\n✓ Vanilla JavaScript (no frameworks)\n✓ Responsive design\n✓ Easy to customize\n✓ Production-ready structure\n\nFeel free to copy or download it!`;
+  }
+
+  if(/youtube|tutorial|content|video|channel/.test(t)){
+    return `🎬 YouTube & Content Creation\n\nRaza plans to create tutorials about:\n✓ Data Science with Python step-by-step\n✓ Web Development courses\n✓ Building projects from scratch\n✓ Coding tips and best practices\n✓ Real-world data analysis projects\n✓ Full-stack development walkthroughs\n\nSubscribe to @learn_with_software_engineer for upcoming videos!\n\nWhat type of tutorial would you like to see?`;
+  }
+
+  if(/search|find|show|where|locate|look for/.test(t) && t.length>3){
+    const results = searchAll(t);
+    if(results.length===0) return 'No matches found in projects, profile, or website info. Try asking about "Data Science", "Data Analyst", or "Raza"!';
+    return '🔍 I found matches — check the Search Results panel on the right for details.';
+  }
+
+  if(/help|what can|how|guide|teach|educate|learn|get started|start|beginning/i.test(t)){
+    return `🤖 How I Can Help You\n\nYou can ask me about:\n\n📚 Website & Courses:\n- "Tell me about Data Science courses"\n- "What's in the Data Analyst path?"\n- "Show me all courses"\n- "What pages does the website have?"\n\n👤 About Raza:\n- "Who created this platform?"\n- "What are Raza's goals?"\n- "What skills does Raza have?"\n- "Tell me about Raza"\n\n💡 Learning & Projects:\n- "Suggest a project idea"\n- "Create a 30-day plan"\n- "Show me sample code"\n- "What projects has Raza built?"\n\n🔍 Search:\n- "Find [project name]"\n- "Search for [topic]"\n- "Show me tutorials"\n\nWhat would you like to know?`;
+  }
+
+  return `👋 Hi! I'm Raza's personal AI assistant for Learn With Software Engineer.\n\nI can help you learn about:\n📚 Data Science & Data Analyst courses\n👨‍💻 About Raza and his goals\n💡 Project ideas and coding samples\n📅 Learning plans and schedules\n🔍 Search across projects and content\n\nAsk me "What can you help with?" or explore the platform!`;
+}
+
+/* Assistant templates */
+function generateProjectIdea(){
+  const ideas = [
+    {
+      title: 'Interactive Data Dashboard',
+      summary: 'A responsive web dashboard for visualizing datasets with filters, search, and real-time charts. Perfect for Learn With Software Engineer tutorials.',
+      stack: ['HTML/CSS', 'JavaScript', 'Chart.js', 'CSV parser'],
+      why: 'Combines data visualization with web development. Great for teaching and portfolio.'
+    },
+    {
+      title: 'Student Progress Tracker',
+      summary: 'Track course completion, quiz scores, and learning progress with analytics and recommendations.',
+      stack: ['Python', 'JavaScript', 'Flask/Node.js', 'MongoDB/SQLite'],
+      why: 'Practical tool for Learn With Software Engineer, showcases full-stack development.'
+    },
+    {
+      title: 'ML Prediction Web App',
+      summary: 'Deploy a machine learning model (e.g., house price prediction, iris classification) as an interactive web app.',
+      stack: ['Python', 'scikit-learn', 'Flask', 'HTML/CSS/JavaScript'],
+      why: 'Demonstrates data science skills from end-to-end. Portfolio-worthy and teaching-friendly.'
+    }
+  ];
+  return ideas[Math.floor(Math.random() * ideas.length)];
+}
+function generate30DayPlan(){
+  return [
+    'Setup: Install Python, VSCode, required libraries (pandas, numpy, matplotlib)',
+    'Week 1: Learn fundamentals - variables, loops, functions, and basic data structures',
+    'Week 2: Dive into libraries - NumPy arrays, Pandas DataFrames, data manipulation',
+    'Week 3: Data visualization - Create meaningful charts and dashboards with Matplotlib & Seaborn',
+    'Week 4: Build a capstone project - Analyze a real dataset and present findings',
+    'Bonus: Deploy your project, create a YouTube tutorial, add to your portfolio on Learn With Software Engineer'
+  ];
+}
+function generateSampleCode(){
+  const codeOptions = [
+    // Card component
+    `// Reusable Course Card Component
+function createCourseCard(course) {
+  const card = document.createElement('div');
+  card.className = 'course-card';
+  card.innerHTML = \`
+    <h3>\${course.title}</h3>
+    <p>\${course.description}</p>
+    <button class="btn-learn">Learn More</button>
+  \`;
+  return card;
+}
+
+// Usage: createCourseCard({
+//   title: 'Data Science Basics',
+//   description: 'Master Python for data science'
+// })`,
+
+    // Data visualization helper
+    `// Simple Data Visualization Function
+function createChart(elementId, labels, data) {
+  const ctx = document.getElementById(elementId).getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Progress',
+        data: data,
+        backgroundColor: '#667eea',
+        borderColor: '#764ba2',
+        borderWidth: 1
+      }]
+    }
+  });
+}`,
+
+    // Fetch and parse CSV
+    `// Load and Parse CSV Data
+async function loadCSV(filePath) {
+  const response = await fetch(filePath);
+  const csv = await response.text();
+  const rows = csv.split('\\n');
+  return rows.map(row => row.split(','));
+}
+
+// Alternative: Use Papa Parse library for robust CSV parsing`
+  ];
+  
+  return codeOptions[Math.floor(Math.random() * codeOptions.length)];
+}
+
+/* Search across chat & projects */
+function searchAll(query){
+  const q = query.toLowerCase();
+  const results = [];
+  projects.forEach(p=>{
+    if((p.title + ' ' + p.description + ' ' + (p.tags||[]).join(' ')).toLowerCase().includes(q)){
+      results.push({ type:'project', id:p.id, title:p.title, description:p.description, tags:p.tags });
+    }
+  });
+  chat.forEach(c=>{
+    if(c.text.toLowerCase().includes(q)){
+      results.push({ type:'chat', id:c.id, text:c.text, time:c.time });
+    }
+  });
+  Object.keys(profile).forEach(k=>{
+    const v = (profile[k] || '').toString();
+    if(v.toLowerCase().includes(q)) results.push({ type:'profile', field:k, value:v });
+  });
+  renderSearchResults(results);
+  return results;
+}
+
+/* Code panel */
+function showCodeInPanel(code){
+  const panel = $('#codePanel'); panel.innerHTML='';
+  const pre = document.createElement('pre'); pre.className='code'; pre.textContent = code;
+  const copy = document.createElement('button'); copy.className='copy-btn'; copy.textContent='Copy'; copy.addEventListener('click', ()=>{ navigator.clipboard.writeText(code); copy.textContent='Copied'; setTimeout(()=>copy.textContent='Copy',1500); });
+  const dl = document.createElement('button'); dl.className='copy-btn'; dl.textContent='Download .js'; dl.addEventListener('click', ()=>{ const blob = new Blob([code],{type:'text/javascript'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='snippet.js'; a.click(); URL.revokeObjectURL(url); });
+  panel.appendChild(pre); panel.appendChild(copy); panel.appendChild(dl);
+}
+
+/* Robust openAssistantModal: ensures chat renders and modal is visible */
+function openAssistantModal(){
+  // scroll to top to emphasize chat area (center column)
+  try{ window.scrollTo({ top: 0, behavior: 'smooth' }); }catch(e){}
+  // bring focus to chat input
+  setTimeout(()=> {
+    $('#chatInput') && $('#chatInput').focus();
+    renderChatWindow(); // ensure chat renders
+  }, 80);
+}
+
+/* Handlers & event wiring (robust, safe checks) */
+function setupEventHandlers(){
+  // Open assistant button
+  const openBtn = document.getElementById('openAssistant');
+  if(openBtn){
+    openBtn.addEventListener('click', ()=>{
+      openAssistantModal();
+    });
+  }
+
+  // Send message
+  $('#sendBtn').addEventListener('click', ()=> {
+    const text = $('#chatInput').value.trim(); if(!text) return;
+    appendChat('me', text); $('#chatInput').value='';
+    setTimeout(()=> {
+      const reply = generateReply(text);
+      appendChat('ai', reply);
+      if(/sample code|sample|code/i.test(text) || /sample code/i.test(reply)){
+        const code = generateSampleCode(); showCodeInPanel(code);
+      }
+    }, 260);
+  });
+  $('#chatInput').addEventListener('keydown',(e)=>{ if(e.key==='Enter') $('#sendBtn').click(); });
+
+  // Quick buttons
+  $('#btnIdea').addEventListener('click', ()=> { $('#chatInput').value='Suggest a project'; $('#sendBtn').click(); openAssistantModal(); });
+  $('#btnPlan').addEventListener('click', ()=> { $('#chatInput').value='Create a 30-day plan'; $('#sendBtn').click(); openAssistantModal(); });
+  $('#btnCode').addEventListener('click', ()=> { $('#chatInput').value='Show sample code for a reusable component'; $('#sendBtn').click(); openAssistantModal(); });
+  $('#btnProfileQA').addEventListener('click', ()=> { $('#chatInput').value='What are my top skills and goals?'; $('#sendBtn').click(); openAssistantModal(); });
+
+  // Global search across chat & projects
+  $('#searchAllBtn').addEventListener('click', ()=> {
+    const q = $('#globalQuery').value.trim(); if(!q) return; searchAll(q); appendChat('me', `Search: ${q}`); setTimeout(()=> appendChat('ai', 'Search results shown in the right panel.'), 200);
+  });
+
+  // Left: new project
+  $('#newProject').addEventListener('click', ()=> openProjectModal());
+  $('#closeProjectBtn').addEventListener('click', ()=> closeProjectModal());
+  $('#projForm').addEventListener('submit', (ev)=> {
+    ev.preventDefault();
+    const t = $('#projTitle').value.trim(); if(!t) return alert('Title required');
+    const tags = $('#projTags').value.split(',').map(s=>s.trim()).filter(Boolean);
+    const desc = $('#projDesc').value.trim();
+    projects.push({ id:uid(), title:t, tags, description:desc, created:Date.now() }); saveProjects(); renderProjectsList(); renderChart(); closeProjectModal();
+  });
+
+  // Profile modal
+  $('#openProfile').addEventListener('click', ()=> openProfileModal());
+  $('#closeProfileBtn').addEventListener('click', ()=> closeProfileModal());
+  $('#saveProfileBtn').addEventListener('click', (e)=> {
+    e.preventDefault();
+    profile.name = $('#f_name').value.trim() || profile.name;
+    profile.region = $('#f_region').value.trim() || profile.region;
+    profile.skills = $('#f_skills').value.split(',').map(s=>s.trim()).filter(Boolean);
+    profile.goals = $('#f_goals').value.split(',').map(s=>s.trim()).filter(Boolean);
+    saveProfile(); renderLeftProfile(); closeProfileModal();
+  });
+  $('#resetProfileBtn').addEventListener('click',(e)=>{ e.preventDefault(); if(confirm('Reset profile?')){ profile = defaultProfile; saveProfile(); renderLeftProfile(); closeProfileModal(); }});
+
+  // Project search input
+  $('#projectSearch').addEventListener('input', e=> renderProjectsList(e.target.value));
+
+  // Export/Import
+  $('#exportAll').addEventListener('click', ()=> {
+    const data = { profile, projects, chat, exportedAt: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='raza-data.json'; a.click(); URL.revokeObjectURL(url);
+  });
+  $('#importData').addEventListener('click', ()=> {
+    const inp = document.createElement('input'); inp.type='file'; inp.accept='application/json';
+    inp.addEventListener('change', async e=>{
+      const f = e.target.files[0]; if(!f) return;
+      const txt = await f.text();
+      try{
+        const d = JSON.parse(txt);
+        if(d.profile) profile = d.profile;
+        if(Array.isArray(d.projects)) projects = d.projects;
+        if(Array.isArray(d.chat)) chat = d.chat;
+        saveProfile(); saveProjects(); saveChat(); renderAll();
+        alert('Imported');
+      }catch(err){ alert('Invalid file'); }
+    });
+    inp.click();
+  });
+
+  // Make sure chat input gets focus when clicking chat area header
+  $('#chatWindow').addEventListener('click', ()=> { $('#chatInput') && $('#chatInput').focus(); });
+}
+
+/* Search results rendering helper */
+function renderSearchResults(results){
+  const el = $('#searchResults'); if(!el) return;
+  el.innerHTML='';
+  if(results.length===0){ el.innerHTML = '<div class="small" style="color:var(--muted)">No results</div>'; return; }
+  results.forEach(r=>{
+    const div = document.createElement('div'); div.style.padding='8px'; div.style.borderRadius='8px'; div.style.marginBottom='8px'; div.style.background='rgba(255,255,255,0.02)';
+    if(r.type==='project'){
+      div.innerHTML = `<strong>${escapeHtml(r.title)}</strong><div class="small">${escapeHtml((r.tags||[]).join(', '))}</div><div style="margin-top:6px">${escapeHtml(r.description || '')}</div>`;
+      div.addEventListener('click', ()=> openProjectQA(r.id));
+    } else if(r.type==='chat'){
+      div.innerHTML = `<div class="small" style="color:var(--muted)">${new Date(r.time).toLocaleString()}</div><div style="margin-top:6px;white-space:pre-wrap">${escapeHtml(r.text)}</div>`;
+    } else if(r.type==='profile'){
+      div.innerHTML = `<strong>Profile</strong><div class="small">${escapeHtml(r.field)}: ${escapeHtml(r.value)}</div>`;
+    }
+    el.appendChild(div);
+  });
+}
+
+/* Initialization and render all */
+function renderAll(){
+  renderLeftProfile();
+  renderProjectsList();
+  renderChatWindow();
+  renderChart();
+  renderSearchResults([]);
+}
+function init(){
+  loadAll();
+  setupEventHandlers();
+  renderAll();
+  // ensure openAssistant button opens chat and renders
+  // add global function so it can be invoked from console if needed
+  window.openAssistantModal = openAssistantModal;
+  // auto-focus the assistant input when "Open Chat" is pressed
+  const openBtn = document.getElementById('openAssistant');
+  if(openBtn) openBtn.addEventListener('click', ()=> { setTimeout(()=> $('#chatInput') && $('#chatInput').focus(), 100); });
+}
+
+/* loadAll defined earlier; render helpers already present */
+loadAll();
+init();
+
+/* Expose some functions for debugging from console */
+window._raza = { profile, projects, chat, openAssistantModal, renderAll };
+
+</script>
+<!-- Bootstrap 5 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

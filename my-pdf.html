@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags for responsive design and character encoding -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="ABC123XYZ">
+    <title>My PDFs - Learn With Software Engineer</title>
+    
+    <!-- Bootstrap 5 CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome icons from CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom internal CSS -->
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .navbar {
+            background-color: #2c3e50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #3498db !important;
+        }
+        
+        .nav-link {
+            color: #ecf0f1 !important;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #3498db !important;
+            transform: translateY(-2px);
+        }
+        
+        .page-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            margin-top: 56px;
+        }
+        
+        .page-title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .section-padding {
+            padding: 80px 0;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .pdf-card {
+            background-color: #f8f9fa;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .pdf-card:hover {
+            border-color: #3498db;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+        
+        .pdf-icon {
+            font-size: 2rem;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .pdf-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .pdf-description {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .download-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background-color: #2980b9;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 50px 0 20px;
+            margin-top: 80px;
+        }
+        
+        .social-link {
+            color: #3498db;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .social-link:hover {
+            color: #ecf0f1;
+            transform: translateY(-3px);
+        }
+        
+        .footer-text {
+            color: #95a5a6;
+        }
+    </style>
+    
+    <!-- Kondee AI Chatbot -->
+    <link rel="stylesheet" href="chatbot.css">
+    <script src="chatbot-data.js"></script>
+    <script src="chatbot.js"></script>
+</head>
+<body>
+    <!-- NAVBAR SECTION -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-code"></i> Learn With Software Engineer
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="services.html">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="category.html">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog.html">Blog</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="portfolioDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Portfolio
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="portfolioDropdown">
+                            <li><a class="dropdown-item" href="data-science.html">Data Science</a></li>
+                            <li><a class="dropdown-item" href="data-analyst.html">Data Analyst</a></li>
+                            <li><a class="dropdown-item" href="app.html">AI Assistant</a></li>
+                            <li><a class="dropdown-item" href="portofolo.html">Project</a></li>
+                            <li><a class="dropdown-item" href="my-pdf.html">My PDFs</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE TITLE SECTION -->
+    <section class="page-title">
+        <div class="container">
+            <h1>My PDFs</h1>
+            <p>Download my collection of educational PDFs and resources</p>
+        </div>
+    </section>
+
+    <!-- PDF LIST SECTION -->
+    <section class="section-padding">
+        <div class="container">
+            <div class="row">
+                <!-- PDF 1 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">Java Notes</h5>
+                        <p class="pdf-description">Complete Java programming notes covering core concepts and advanced topics.</p>
+                        <a href="https://drive.google.com/drive/folders/1B_DJzw2nwMN2Fsx4WB6SyQFhPqsOvb16" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 2 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">Data Analysis With Python</h5>
+                        <p class="pdf-description">Learn data analysis techniques using Python libraries like Pandas and NumPy.</p>
+                        <a href="https://drive.google.com/drive/folders/1B_DJzw2nwMN2Fsx4WB6SyQFhPqsOvb16" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 3 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">C Language</h5>
+                        <p class="pdf-description">Comprehensive guide to C programming language fundamentals and applications.</p>
+                        <a href="https://drive.google.com/drive/folders/1B_DJzw2nwMN2Fsx4WB6SyQFhPqsOvb16" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 4 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">C++ Notes</h5>
+                        <p class="pdf-description">Object-oriented programming with C++ - from basics to advanced concepts.</p>
+                        <a href="https://drive.google.com/drive/folders/1B_DJzw2nwMN2Fsx4WB6SyQFhPqsOvb16" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 5 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">MongoDB</h5>
+                        <p class="pdf-description">NoSQL database MongoDB - handwritten notes covering document structure and operations.</p>
+                        <a href="MongoDB%20HandWritten%20Note.pdf" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 6 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">Node.js</h5>
+                        <p class="pdf-description">Backend development with Node.js - server-side JavaScript for web applications.</p>
+                        <a href="https://drive.google.com/drive/folders/1B_DJzw2nwMN2Fsx4WB6SyQFhPqsOvb16" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 7 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">HTML</h5>
+                        <p class="pdf-description">HTML5 markup language - structure and semantics for web pages.</p>
+                        <a href="https://drive.google.com/drive/folders/1B_DJzw2nwMN2Fsx4WB6SyQFhPqsOvb16" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 8 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">MERN Stack Notes</h5>
+                        <p class="pdf-description">Complete MERN stack (MongoDB, Express, React, Node.js) development guide.</p>
+                        <a href="https://drive.google.com/drive/folders/1B_DJzw2nwMN2Fsx4WB6SyQFhPqsOvb16" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 9 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">DSA Notes</h5>
+                        <p class="pdf-description">Data Structures and Algorithms - handwritten notes for interview preparation.</p>
+                        <a href="https://drive.google.com/drive/folders/1B_DJzw2nwMN2Fsx4WB6SyQFhPqsOvb16" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 10 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">Data Science With Python</h5>
+                        <p class="pdf-description">Master data science concepts and machine learning with Python.</p>
+                        <a href="Data%20science%20with%20python.pdf" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 11 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">Python Notes</h5>
+                        <p class="pdf-description">Complete Python programming guide from basics to advanced topics.</p>
+                        <a href="python%20notes.pdf" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 12 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">DBMS Notes</h5>
+                        <p class="pdf-description">Database Management System and SQL - comprehensive guide for data management.</p>
+                        <a href="DBMS%20%26%20SQL%20Notes%20(1).pdf" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 13 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">React.js Notes</h5>
+                        <p class="pdf-description">Frontend development with React - components, hooks, and state management.</p>
+                        <a href="https://drive.google.com/drive/folders/1B_DJzw2nwMN2Fsx4WB6SyQFhPqsOvb16" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 14 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">SQL Notes</h5>
+                        <p class="pdf-description">SQL database queries, optimization, and best practices for data retrieval.</p>
+                        <a href="SQL%20notes.pdf" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 15 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">JavaScript Notes</h5>
+                        <p class="pdf-description">JavaScript programming - ES6+, DOM manipulation, and async programming.</p>
+                        <a href="https://drive.google.com/drive/folders/1B_DJzw2nwMN2Fsx4WB6SyQFhPqsOvb16" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 16 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">CSS Notes</h5>
+                        <p class="pdf-description">CSS styling - layouts, flexbox, grid, and responsive design techniques.</p>
+                        <a href="CSS%20Cheatsheet.pdf" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+
+                <!-- PDF 17 -->
+                <div class="col-md-4">
+                    <div class="pdf-card">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <h5 class="pdf-title">PHP Notes</h5>
+                        <p class="pdf-description">PHP backend development - server-side scripting and web application development.</p>
+                        <a href="Php%20Cheatsheet%20(2).pdf" class="download-btn">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER SECTION -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Learn With Software Engineer</h5>
+                    <p>Your trusted partner in software engineering education and development.</p>
+                    <div class="mt-3">
+                       <a href="https://www.facebook.com/profile.php?id=61578725471951" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="https://github.com" class="social-link"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/feed/" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://www.youtube.com/@learn_with_software_engineer" class="social-link"><i class="fab fa-youtube"></i></a>
+                    <a href="https://wa.me/923363200433" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="footer-text">Home</a></li>
+                        <li><a href="about.html" class="footer-text">About</a></li>
+                        <li><a href="services.html" class="footer-text">Services</a></li>
+                        <li><a href="contact.html" class="footer-text">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Portfolio</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="data-science.html" class="footer-text">Data Science</a></li>
+                        <li><a href="data-analyst.html" class="footer-text">Data Analyst</a></li>
+                        <li><a href="app.html" class="footer-text">AI Assistant</a></li>
+                        <li><a href="my-pdf.html" class="footer-text">My PDFs</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-secondary">
+            <div class="text-center footer-text">
+                <p>&copy; 2024 Learn With Software Engineer. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

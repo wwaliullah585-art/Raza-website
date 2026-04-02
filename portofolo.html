@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>RAZA — Portfolio & Project Manager</title>
+<!-- Chart.js CDN (approved) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  /* -------------------------
+     CSS Variables & Reset
+     ------------------------- */
+  :root{
+    --bg: #0f1724;
+    --card: #0b1220;
+    --muted: #9aa4b2;
+    --accent: #06b6d4;
+    --accent-2: #7c3aed;
+    --glass: rgba(255,255,255,0.03);
+    --success: #10b981;
+    --danger: #ef4444;
+    --radius: 12px;
+    --max-w: 1100px;
+    color-scheme: dark;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:linear-gradient(180deg,var(--bg), #071025 120%);
+    color:#e6eef6;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding:24px;
+    display:flex;
+    justify-content:center;
+  }
+  .wrap{
+    width:100%;
+    max-width:var(--max-w);
+  }
+  /* -------------------------
+     Layout
+     ------------------------- */
+  header{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:18px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .logo{
+    width:52px;
+    height:52px;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:grid;
+    place-items:center;
+    font-weight:700;
+    color:#001219;
+    box-shadow:0 6px 18px rgba(0,0,0,0.5);
+  }
+  h1{font-size:18px;margin:0}
+  .subtitle{font-size:12px;color:var(--muted)}
+  .top-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+  .btn{
+    background:var(--glass);
+    border:1px solid rgba(255,255,255,0.03);
+    color:inherit;
+    padding:8px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:all .18s;
+    font-size:13px;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn.primary{
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#001219;
+    border:none;
+  }
+  /* -------------------------
+     Grid
+     ------------------------- */
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 380px;
+    gap:18px;
+    align-items:start;
+  }
+  @media (max-width:980px){
+    .grid{grid-template-columns:1fr}
+  }
+  /* -------------------------
+     Left column: main content
+     ------------------------- */
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:var(--radius);
+    padding:16px;
+    box-shadow:0 6px 30px rgba(2,6,23,0.6);
+    border:1px solid rgba(255,255,255,0.02);
+  }
+  .hero{
+    display:flex;
+    gap:16px;
+    align-items:center;
+    margin-bottom:12px;
+  }
+  .avatar{
+    width:84px;height:84px;border-radius:14px;background:linear-gradient(135deg,var(--accent-2),var(--accent));display:grid;place-items:center;font-weight:700;font-size:20px;color:#001219;
+  }
+  .skills{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .chip{background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:999px;font-size:13px;color:var(--muted)}
+  .controls{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  /* -------------------------
+     Projects grid
+     ------------------------- */
+  .projects-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+  @media (max-width:720px){ .projects-grid{grid-template-columns:1fr} }
+  .project{
+    padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(0,0,0,0.15), rgba(255,255,255,0.02));
+    border:1px solid rgba(255,255,255,0.02);cursor:pointer;transition:transform .12s, box-shadow .12s;
+  }
+  .project:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(2,6,23,0.6)}
+  .project h3{margin:0;font-size:15px}
+  .project .meta{font-size:12px;color:var(--muted);margin-top:6px}
+  .tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+  .tag{font-size:12px;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,0.02);color:var(--muted)}
+  /* -------------------------
+     Right column: sidebar
+     ------------------------- */
+  .sidebar-section{margin-bottom:12px}
+  .small{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .chart-wrap{height:180px;padding:8px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));display:flex;align-items:center}
+  /* -------------------------
+     Modal
+     ------------------------- */
+  .modal-backdrop{
+    position:fixed;inset:0;background:linear-gradient(0deg, rgba(0,0,0,0.6), rgba(0,0,0,0.6));display:none;place-items:center;padding:18px;z-index:60;
+  }
+  .modal{
+    max-width:760px;width:100%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:16px;border:1px solid rgba(255,255,255,0.03);
+  }
+  .form-row{display:flex;gap:8px;margin-bottom:10px}
+  .form-row .col{flex:1}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  input,textarea,select{
+    width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:rgba(0,0,0,0.25);color:inherit;font-size:13px;
+  }
+  textarea{min-height:90px;resize:vertical}
+  .form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+  .muted-note{font-size:13px;color:var(--muted);margin-top:6px}
+  /* -------------------------
+     Footer / helper
+     ------------------------- */
+  footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+  /* -------------------------
+     Tiny utilities
+     ------------------------- */
+  .row{display:flex;gap:8px;align-items:center}
+  .badge{background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:8px;font-size:13px}
+  .pill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);font-size:13px}
+  .empty{padding:20px;border-radius:10px;text-align:center;color:var(--muted);background:rgba(255,255,255,0.02)}
+  small.note{display:block;color:var(--muted);font-size:12px;margin-top:6px}
+  a.link{color:var(--accent);text-decoration:none}
+  /* accessible focus */
+  button:focus, input:focus, textarea:focus { outline:2px solid rgba(99,102,241,0.18); outline-offset:2px; }
+</style>
+
+    <!-- Kondee AI Chatbot -->
+    <link rel="stylesheet" href="chatbot.css">
+    <script src="chatbot-data.js"></script>
+    <script src="chatbot.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">RZ</div>
+        <div>
+          <h1>RAZA — Portfolio & Project Manager</h1>
+          <div class="subtitle">Personalized for your skills: HTML · CSS · JavaScript · Responsive Design</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn" id="themeToggle" title="Toggle theme">Theme</button>
+        <button class="btn" id="exportBtn" title="Export projects">Export</button>
+        <button class="btn primary" id="newProjectBtn">+ New Project</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section>
+        <div class="card hero">
+          <div class="avatar">RZ</div>
+          <div style="flex:1">
+            <strong style="font-size:15px">Hello, RAZA — Software Engineer</strong>
+            <div class="small muted">Build professional web apps, refine skills, and grow your freelance portfolio.</div>
+            <div class="skills" aria-hidden="true">
+              <div class="chip">HTML</div><div class="chip">CSS</div><div class="chip">JavaScript</div>
+              <div class="chip">Responsive</div><div class="chip">Charts</div><div class="chip">Accessibility</div>
+            </div>
+            <div class="controls">
+              <button class="btn" id="focusDashboard">Open Dashboard</button>
+              <button class="btn" id="practiceBtn">Practice Exercise</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <strong>Projects</strong>
+              <div class="small">Manage projects — add details, tasks, and track progress.</div>
+            </div>
+            <div class="row">
+              <input id="searchInput" placeholder="Search projects..." style="background:transparent;border:none;border-radius:8px;padding:8px 10px;color:var(--muted);min-width:140px" />
+              <select id="filterTag" style="background:transparent;border:none;color:var(--muted);">
+                <option value="">All tags</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="projectsContainer" class="projects-grid" style="margin-top:12px">
+            <!-- Projects inserted here -->
+          </div>
+
+          <div id="noProjects" class="empty" style="display:none;margin-top:12px">
+            No projects yet. Click "New Project" to add one.
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <strong>Mini Todo (Project Tasks)</strong>
+          <div class="small">Create quick tasks tied to a project. Tasks persist to localStorage.</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <input id="taskInput" placeholder="New task..." />
+            <select id="taskProjectSelect" style="min-width:160px">
+              <option value="">No project</option>
+            </select>
+            <button class="btn" id="addTaskBtn">Add</button>
+          </div>
+          <div id="tasksList" style="margin-top:12px"></div>
+        </div>
+      </section>
+
+      <aside>
+        <div class="card sidebar-section">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <strong>Dashboard</strong>
+              <div class="small">Overview of projects and tasks</div>
+            </div>
+            <div class="badge" id="projectsCount">0</div>
+          </div>
+
+          <div style="margin-top:10px">
+            <div class="small">Projects by tag</div>
+            <div class="chart-wrap" style="margin-top:8px">
+              <canvas id="tagChart" style="width:100%"></canvas>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="small">Progress</div>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <div class="pill" id="progressPill">0 tasks</div>
+              <div class="pill" id="completedPill">0 done</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card sidebar-section">
+          <strong>Quick Tips</strong>
+          <div class="small">UI/UX suggestions tailored to you</div>
+          <ul style="margin-top:8px;color:var(--muted);padding-left:18px">
+            <li>Use component-based structure for reusability.</li>
+            <li>Mobile-first CSS, then enhance for larger breakpoints.</li>
+            <li>Use localStorage for rapid prototypes; migrate to backend when scaling.</li>
+          </ul>
+        </div>
+
+        <div class="card sidebar-section">
+          <strong>Color Scheme</strong>
+          <div class="small">Modern gradient + glass effect</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));"></div>
+            <div style="width:44px;height:44px;border-radius:8px;background:#0f1724;border:1px solid rgba(255,255,255,0.03)"></div>
+            <div style="width:44px;height:44px;border-radius:8px;background:#0b1220;border:1px solid rgba(255,255,255,0.03)"></div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      Built for you — ready to extend. Tip: press "Practice Exercise" to get a tailored coding challenge.
+    </footer>
+  </div>
+
+  <!-- Modal (hidden initially) -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-hidden="true">
+    <div class="modal" role="document" aria-labelledby="modalTitle">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div>
+          <h2 id="modalTitle" style="margin:0">New Project</h2>
+          <div class="small" id="modalSubtitle">Add project details</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" id="closeModal">Close</button>
+        </div>
+      </div>
+
+      <form id="projectForm">
+        <div class="form-row">
+          <div class="col">
+            <label for="title">Title</label>
+            <input id="title" name="title" required placeholder="My Portfolio Site" />
+          </div>
+          <div class="col">
+            <label for="status">Status</label>
+            <select id="status" name="status">
+              <option value="idea">Idea</option>
+              <option value="in-progress">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="col">
+            <label for="tags">Tags (comma separated)</label>
+            <input id="tags" name="tags" placeholder="portfolio, javascript" />
+          </div>
+          <div class="col">
+            <label for="link">URL (optional)</label>
+            <input id="link" name="link" placeholder="https://..." />
+          </div>
+        </div>
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" placeholder="Short description of the project"></textarea>
+
+        <div class="form-actions">
+          <button type="button" class="btn" id="deleteProjectBtn" style="display:none;background:rgba(255,0,0,0.06);color:var(--danger)">Delete</button>
+          <button type="button" class="btn" id="cancelForm">Cancel</button>
+          <button type="submit" class="btn primary" id="saveProjectBtn">Save Project</button>
+        </div>
+      </form>
+
+      <small class="muted-note">Tip: Add tags to categorize and iterate quickly. Projects saved locally.</small>
+    </div>
+  </div>
+
+<script>
+/*
+  RAZA — Project Manager App (single file)
+  - Designed for you: fully responsive, uses localStorage, interactive features.
+  - Main data models: projects[], tasks[] stored in localStorage.
+  - Chart.js used for visualization (tags distribution).
+*/
+
+/* -------------------------
+   Utilities
+   ------------------------- */
+const qs = (sel, root=document) => root.querySelector(sel);
+const qsa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+const uid = ()=>Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+
+/* -------------------------
+   Local storage keys & initial data
+   ------------------------- */
+const LS_PROJECTS = 'raza_projects_v1';
+const LS_TASKS = 'raza_tasks_v1';
+let projects = [];
+let tasks = [];
+
+/* -------------------------
+   Elements
+   ------------------------- */
+const projectsContainer = qs('#projectsContainer');
+const noProjects = qs('#noProjects');
+const projectsCount = qs('#projectsCount');
+const tagChartCtx = qs('#tagChart');
+const tagFilter = qs('#filterTag');
+const searchInput = qs('#searchInput');
+const newProjectBtn = qs('#newProjectBtn');
+const modalBackdrop = qs('#modalBackdrop');
+const projectForm = qs('#projectForm');
+const titleInput = qs('#title');
+const statusInput = qs('#status');
+const tagsInput = qs('#tags');
+const linkInput = qs('#link');
+const descInput = qs('#description');
+const closeModalBtn = qs('#closeModal');
+const saveProjectBtn = qs('#saveProjectBtn');
+const deleteProjectBtn = qs('#deleteProjectBtn');
+const cancelForm = qs('#cancelForm');
+const exportBtn = qs('#exportBtn');
+const themeToggle = qs('#themeToggle');
+const practiceBtn = qs('#practiceBtn');
+const focusDashboardBtn = qs('#focusDashboard');
+
+const taskInput = qs('#taskInput');
+const taskProjectSelect = qs('#taskProjectSelect');
+const addTaskBtn = qs('#addTaskBtn');
+const tasksList = qs('#tasksList');
+const progressPill = qs('#progressPill');
+const completedPill = qs('#completedPill');
+
+/* Modal state */
+let editingProjectId = null;
+
+/* -------------------------
+   Persistence helpers
+   ------------------------- */
+function saveState(){
+  localStorage.setItem(LS_PROJECTS, JSON.stringify(projects));
+  localStorage.setItem(LS_TASKS, JSON.stringify(tasks));
+}
+function loadState(){
+  const p = localStorage.getItem(LS_PROJECTS);
+  const t = localStorage.getItem(LS_TASKS);
+  projects = p ? JSON.parse(p) : sampleProjects();
+  tasks = t ? JSON.parse(t) : [];
+}
+
+/* -------------------------
+   Sample starter projects
+   ------------------------- */
+function sampleProjects(){
+  const samples = [
+    {
+      id: uid(), title: 'Personal Portfolio', description: 'Showcase projects, resume, and contact form.', tags:['portfolio','css','responsive'], status:'in-progress', link:'', created: Date.now()
+    },
+    {
+      id: uid(), title: 'Interactive Data Dashboard', description: 'Charts and filters for business metrics.', tags:['dashboard','charts','javascript'], status:'idea', link:'', created: Date.now()
+    },
+    {
+      id: uid(), title: 'Mini Game: JS Puzzle', description: 'Browser-based puzzle game to demonstrate logic and animations.', tags:['game','canvas','js'], status:'completed', link:'', created: Date.now()
+    }
+  ];
+  localStorage.setItem(LS_PROJECTS, JSON.stringify(samples));
+  return samples;
+}
+
+/* -------------------------
+   Rendering functions
+   ------------------------- */
+function renderProjects(filterText='', filterTag=''){
+  const list = projects.slice().reverse(); // newest first
+  let filtered = list;
+  if(filterText){
+    const ft = filterText.toLowerCase();
+    filtered = filtered.filter(p=> (p.title + ' ' + p.description + ' ' + (p.tags||[]).join(' ')).toLowerCase().includes(ft));
+  }
+  if(filterTag){
+    filtered = filtered.filter(p => (p.tags||[]).includes(filterTag));
+  }
+  projectsContainer.innerHTML = '';
+  if(filtered.length === 0){
+    noProjects.style.display = 'block';
+  } else {
+    noProjects.style.display = 'none';
+    filtered.forEach(p => {
+      const el = document.createElement('div');
+      el.className = 'project';
+      el.dataset.id = p.id;
+      el.innerHTML = `
+        <h3>${escapeHtml(p.title)}</h3>
+        <div class="meta">${escapeHtml(p.status)} · ${new Date(p.created).toLocaleDateString()}</div>
+        <div class="tags">${(p.tags||[]).map(t=>`<div class="tag">${escapeHtml(t)}</div>`).join('')}</div>
+      `;
+      el.addEventListener('click', ()=> openProjectModal(p.id));
+      projectsContainer.appendChild(el);
+    });
+  }
+  updateSidebarData();
+}
+
+/* escape HTML to prevent injection (simple) */
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c]); }
+
+/* -------------------------
+   Modal form
+   ------------------------- */
+function openNewProjectModal(){
+  editingProjectId = null;
+  qs('#modalTitle').textContent = 'New Project';
+  qs('#modalSubtitle').textContent = 'Add project details';
+  deleteProjectBtn.style.display = 'none';
+  projectForm.reset();
+  modalBackdrop.style.display = 'grid';
+  modalBackdrop.setAttribute('aria-hidden','false');
+  titleInput.focus();
+}
+
+function openProjectModal(id){
+  const p = projects.find(x=>x.id===id);
+  if(!p) return;
+  editingProjectId = p.id;
+  qs('#modalTitle').textContent = p.title;
+  qs('#modalSubtitle').textContent = 'Edit project';
+  titleInput.value = p.title;
+  statusInput.value = p.status || 'idea';
+  tagsInput.value = (p.tags||[]).join(', ');
+  linkInput.value = p.link || '';
+  descInput.value = p.description || '';
+  deleteProjectBtn.style.display = 'inline-block';
+  modalBackdrop.style.display = 'grid';
+  modalBackdrop.setAttribute('aria-hidden','false');
+}
+
+function closeModal(){
+  modalBackdrop.style.display = 'none';
+  modalBackdrop.setAttribute('aria-hidden','true');
+  editingProjectId = null;
+}
+
+/* -------------------------
+   CRUD operations
+   ------------------------- */
+function saveProjectFromForm(e){
+  e.preventDefault();
+  const title = titleInput.value.trim();
+  if(!title) { alert('Title required'); return; }
+  const status = statusInput.value;
+  const tags = tagsInput.value.split(',').map(s=>s.trim()).filter(Boolean);
+  const link = linkInput.value.trim();
+  const desc = descInput.value.trim();
+
+  if(editingProjectId){
+    const p = projects.find(x=>x.id===editingProjectId);
+    if(!p) return;
+    p.title = title; p.status = status; p.tags = tags; p.link = link; p.description = desc;
+  } else {
+    projects.push({
+      id: uid(), title, status, tags, link, description: desc, created: Date.now()
+    });
+  }
+  saveState();
+  refreshUI();
+  closeModal();
+}
+
+function deleteCurrentProject(){
+  if(!editingProjectId) return;
+  if(!confirm('Delete this project?')) return;
+  projects = projects.filter(p=>p.id !== editingProjectId);
+  // also remove tasks linked to this project
+  tasks = tasks.filter(t=> t.projectId !== editingProjectId);
+  saveState();
+  refreshUI();
+  closeModal();
+}
+
+/* -------------------------
+   Tasks (mini todo)
+   ------------------------- */
+function renderTasks(){
+  tasksList.innerHTML = '';
+  if(tasks.length === 0){ tasksList.innerHTML = '<div class="empty">No tasks yet</div>'; return; }
+  tasks.slice().reverse().forEach(t=>{
+    const row = document.createElement('div');
+    row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.padding='8px'; row.style.borderRadius='8px';
+    row.style.background='rgba(255,255,255,0.02)'; row.style.marginBottom='8px';
+    row.innerHTML = `
+      <div>
+        <div style="font-size:14px; ${t.done ? 'text-decoration:line-through;opacity:0.6':''}">${escapeHtml(t.text)}</div>
+        <small style="color:var(--muted)">${t.projectTitle ? escapeHtml(t.projectTitle) : 'General'}</small>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn" data-action="toggle">${t.done ? 'Undo' : 'Done'}</button>
+        <button class="btn" data-action="del">Delete</button>
+      </div>
+    `;
+    row.querySelector('[data-action="toggle"]').addEventListener('click', ()=>{
+      t.done = !t.done; saveState(); renderTasks(); updateSidebarData();
+    });
+    row.querySelector('[data-action="del"]').addEventListener('click', ()=>{
+      tasks = tasks.filter(x=>x.id !== t.id); saveState(); renderTasks(); updateSidebarData();
+    });
+    tasksList.appendChild(row);
+  });
+}
+
+/* -------------------------
+   Add task
+   ------------------------- */
+function addTask(){
+  const text = taskInput.value.trim();
+  if(!text) return;
+  const projectId = taskProjectSelect.value || null;
+  const projectTitle = projectId ? (projects.find(p=>p.id===projectId)||{}).title : null;
+  tasks.push({ id: uid(), text, projectId, projectTitle, done:false, created: Date.now() });
+  saveState();
+  taskInput.value = '';
+  renderTasks();
+  updateSidebarData();
+}
+
+/* -------------------------
+   Sidebar & Chart
+   ------------------------- */
+let chartInstance = null;
+function updateSidebarData(){
+  // projects count
+  projectsCount.textContent = projects.length;
+
+  // fill tag filter options
+  const tags = aggregateTags();
+  tagFilter.innerHTML = '<option value="">All tags</option>' + tags.map(t=>`<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+
+  // task stats
+  const totalTasks = tasks.length;
+  const doneTasks = tasks.filter(t=>t.done).length;
+  progressPill.textContent = `${totalTasks} tasks`;
+  completedPill.textContent = `${doneTasks} done`;
+
+  // update chart (tags distribution)
+  const labels = Object.keys(tags.reduce((acc,t)=>{acc[t]=0;return acc;},{}));
+  const counts = labels.map(l => projects.filter(p => (p.tags||[]).includes(l)).length);
+  renderTagChart(labels, counts);
+
+  // update project select for tasks
+  taskProjectSelect.innerHTML = '<option value="">No project</option>' + projects.map(p=>`<option value="${p.id}">${escapeHtml(p.title)}</option>`).join('');
+}
+
+/* build unique tag list (sorted) */
+function aggregateTags(){
+  const s = new Set();
+  projects.forEach(p => (p.tags||[]).forEach(t => s.add(t)));
+  return Array.from(s).sort();
+}
+
+/* Chart.js render */
+function renderTagChart(labels, counts){
+  if(chartInstance) chartInstance.destroy();
+  chartInstance = new Chart(tagChartCtx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{
+        data: counts,
+        backgroundColor: [
+          'rgba(6,182,212,0.92)',
+          'rgba(124,58,237,0.9)',
+          'rgba(16,185,129,0.9)',
+          'rgba(234,179,8,0.9)',
+          'rgba(239,68,68,0.9)'
+        ],
+        hoverOffset:6,
+        borderWidth:0
+      }]
+    },
+    options: {
+      plugins: { legend: { display: labels.length>0, position:'bottom', labels:{color:'#cfd8e3',padding:8} } },
+      maintainAspectRatio:false,
+      responsive:true
+    }
+  });
+}
+
+/* -------------------------
+   UI Helpers
+   ------------------------- */
+function refreshUI(){
+  const ft = searchInput.value.trim();
+  const tag = tagFilter.value;
+  renderProjects(ft, tag);
+  renderTasks();
+  updateSidebarData();
+}
+
+/* -------------------------
+   Search & Filter handlers
+   ------------------------- */
+searchInput.addEventListener('input', ()=> renderProjects(searchInput.value.trim(), tagFilter.value));
+tagFilter.addEventListener('change', ()=> renderProjects(searchInput.value.trim(), tagFilter.value));
+
+/* -------------------------
+   Event bindings
+   ------------------------- */
+newProjectBtn.addEventListener('click', openNewProjectModal);
+closeModalBtn.addEventListener('click', closeModal);
+cancelForm.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', (e)=>{
+  if(e.target === modalBackdrop) closeModal();
+});
+projectForm.addEventListener('submit', saveProjectFromForm);
+deleteProjectBtn.addEventListener('click', deleteCurrentProject);
+exportBtn.addEventListener('click', ()=>{
+  const data = { projects, tasks, exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'raza-projects.json'; a.click();
+  URL.revokeObjectURL(url);
+});
+themeToggle.addEventListener('click', ()=>{
+  // quick theme switch: invert background colors for light mode
+  const el = document.documentElement;
+  if(el.style.getPropertyValue('--bg') === '#0f1724'){
+    el.style.setProperty('--bg','#f7fafc');
+    el.style.setProperty('--card','#ffffff');
+    el.style.setProperty('--muted','#475569');
+    el.style.setProperty('--accent','#06b6d4');
+    el.style.setProperty('--accent-2','#7c3aed');
+    el.style.setProperty('color-scheme','light');
+    document.body.style.color = '#04293a';
+  } else {
+    el.style.setProperty('--bg','#0f1724');
+    el.style.setProperty('--card','#0b1220');
+    el.style.setProperty('--muted','#9aa4b2');
+    el.style.setProperty('color-scheme','dark');
+    document.body.style.color = '#e6eef6';
+  }
+});
+practiceBtn.addEventListener('click', ()=>{
+  // Tailored practice exercise based on your goals and skills
+  alert('Practice: Build a component-based version of this projects list using modules or a small framework. Task: Extract the project card into a reusable component, and add drag-and-drop reordering.');
+});
+focusDashboardBtn.addEventListener('click', ()=>{
+  // scroll to dashboard
+  qs('.sidebar-section').scrollIntoView({behavior:'smooth'});
+});
+
+/* tasks */
+addTaskBtn.addEventListener('click', addTask);
+taskInput.addEventListener('keydown', (e)=> { if(e.key === 'Enter') addTask(); });
+
+/* -------------------------
+   Init
+   ------------------------- */
+loadState();
+refreshUI();
+
+/* -------------------------
+   Small helper: seed some UI tips in console (mentoring)
+   ------------------------- */
+console.info("RAZA Assistant: Tips for next steps:\n- Convert this app into component-based structure (ES modules or a framework).\n- Add backend: simple Express + JSON storage or Firebase for sync.\n- Replace localStorage with indexedDB for larger data sets.\n- Add user auth and deploy to Netlify or Vercel.\nPractice exercises available via the 'Practice Exercise' button.");
+
+/* -------------------------
+   Accessibility & small utilities
+   ------------------------- */
+// ensure focus trap when modal open (basic)
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>

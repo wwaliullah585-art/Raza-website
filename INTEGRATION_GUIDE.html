@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Integration Guide - Kondee AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 50px;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .step {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+
+        code {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            line-height: 1.5;
+            font-family: 'Courier New', monospace;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .success {
+            background: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+            border-radius: 5px;
+            color: #155724;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .file-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .file-list ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .file-list li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .file-list li:before {
+            content: "📄";
+            position: absolute;
+            left: 0;
+        }
+
+        .quick-start {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .quick-start h3 {
+            color: white;
+        }
+
+        .quick-start code {
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+        }
+
+        .faq-item {
+            margin: 20px 0;
+        }
+
+        .faq-question {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .table td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #ecf0f1;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            pre {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Kondee AI Chatbot</h1>
+        <p class="subtitle">Complete Integration Guide for Your Website</p>
+
+        <div class="success">
+            <strong>✅ Ready to Deploy!</strong> All files have been created and are ready to integrate into your website.
+        </div>
+
+        <!-- ===================== -->
+        <!-- QUICK START SECTION -->
+        <!-- ===================== -->
+        <div class="quick-start">
+            <h3>⚡ Quick Start</h3>
+            <p>To add the chatbot to any page, include these 2 lines in the <code>&lt;head&gt;</code> section:</p>
+            <pre>&lt;link rel="stylesheet" href="chatbot.css"&gt;
+&lt;script src="chatbot-data.js"&gt;&lt;/script&gt;
+&lt;script src="chatbot.js"&gt;&lt;/script&gt;</pre>
+            <p>That's it! The chatbot will appear automatically on all your pages.</p>
+        </div>
+
+        <!-- ===================== -->
+        <!-- FILES CREATED -->
+        <!-- ===================== -->
+        <h2>📁 Files Created</h2>
+        <div class="file-list">
+            <ul>
+                <li><strong>chatbot.js</strong> - Main chatbot logic and functionality</li>
+                <li><strong>chatbot-data.js</strong> - Website content database</li>
+                <li><strong>chatbot.css</strong> - Modern styling and animations</li>
+                <li><strong>INTEGRATION_GUIDE.html</strong> - This documentation file</li>
+            </ul>
+        </div>
+
+        <!-- ===================== -->
+        <!-- STEP-BY-STEP GUIDE -->
+        <!-- ===================== -->
+        <h2>📋 Step-by-Step Integration Guide</h2>
+
+        <div class="step">
+            <h3>Step 1: Verify All Files Are in Place</h3>
+            <p>Make sure you have uploaded these 3 files to your website root directory:</p>
+            <ul>
+                <li>chatbot.js</li>
+                <li>chatbot-data.js</li>
+                <li>chatbot.css</li>
+            </ul>
+            <p><strong>Files should be in the same directory as your HTML pages.</strong></p>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Add Script Tags to Your HTML Pages</h3>
+            <p>Open each HTML file (index.html, about.html, services.html, etc.) and add these lines <strong>before the closing &lt;/head&gt; tag</strong>:</p>
+            <pre>&lt;!-- Kondee AI Chatbot --&gt;
+&lt;link rel="stylesheet" href="chatbot.css"&gt;
+&lt;script src="chatbot-data.js"&gt;&lt;/script&gt;
+&lt;script src="chatbot.js"&gt;&lt;/script&gt;</pre>
+            <p><strong>✅ Important:</strong> The order matters! Load CSS first, then data, then main script.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Ensure Font Awesome is Loaded</h3>
+            <p>Your pages must have Font Awesome icons included. Look for this line in your &lt;head&gt;:</p>
+            <pre>&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;</pre>
+            <p>If you don't have it, add it to each page's &lt;head&gt; section.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Test the Chatbot</h3>
+            <p>Open your website in a browser. You should see:</p>
+            <ul>
+                <li>A floating purple button in the bottom-right corner (with robot icon)</li>
+                <li>Click it to open the chat window</li>
+                <li>Try typing a question like: "What courses do you offer?"</li>
+            </ul>
+        </div>
+
+        <!-- ===================== -->
+        <!-- EXAMPLE FILE -->
+        <!-- ===================== -->
+        <h2>📄 Example: How Your HTML Should Look</h2>
+        <p>Here's a complete example of an HTML page with the chatbot integrated:</p>
+        <pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Your Page Title&lt;/title&gt;
+    
+    &lt;!-- Existing stylesheets --&gt;
+    &lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+    &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"&gt;
+    
+    &lt;!-- ⭐ KONDEE AI CHATBOT - ADD THESE LINES ⭐ --&gt;
+    &lt;link rel="stylesheet" href="chatbot.css"&gt;
+    &lt;script src="chatbot-data.js"&gt;&lt;/script&gt;
+    &lt;script src="chatbot.js"&gt;&lt;/script&gt;
+    &lt;!-- ⭐ END CHATBOT SETUP ⭐ --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Your page content here --&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+        <!-- ===================== -->
+        <!-- CUSTOMIZATION GUIDE -->
+        <!-- ===================== -->
+        <h2>🎨 Customization Guide</h2>
+
+        <h3>1. Update Website Content</h3>
+        <p>The chatbot's knowledge comes from <code>chatbot-data.js</code>. To add new information:</p>
+        <pre>const websiteData = {
+  home: {
+    title: "Your Title",
+    content: "Your content here..."
+  },
+  // Add more sections...
+};</pre>
+        <p><strong>Each section needs:</strong></p>
+        <ul>
+            <li><code>title</code> - Section name</li>
+            <li><code>keywords</code> - Words that trigger this section</li>
+            <li><code>content</code> - The actual information to display</li>
+        </ul>
+
+        <h3>2. Add More Keywords</h3>
+        <p>To make the chatbot smarter, add more keywords to <code>keywordMap</code>:</p>
+        <pre>const keywordMap = {
+  "your keyword": ["section_name"],
+  "another keyword": ["section_name"],
+};</pre>
+
+        <h3>3. Change Colors</h3>
+        <p>Edit the CSS variables at the top of <code>chatbot.css</code>:</p>
+        <pre">/* In chatbot.css */
+#kondee-chatbot {
+  --primary-color: #3498db;
+  --secondary-color: #2c3e50;
+  --accent-color: #e74c3c;
+  /* Change these hex colors to customize */
+}</pre>
+
+        <h3>4. Change Chatbot Name</h3>
+        <p>In <code>chatbot.js</code>, find the greeting message and change "Kondee AI":</p>
+        <pre>&lt;p&gt;👋 Hi there! I'm Kondee AI, your personal website assistant...&lt;/p&gt;</pre>
+
+        <h3>5. Adjust Chat Window Size</h3>
+        <p>Edit these CSS properties in <code>chatbot.css</code>:</p>
+        <pre">.chat-window {
+  width: 420px;      /* Change width */
+  height: 600px;     /* Change height */
+  bottom: 100px;     /* Distance from bottom */
+  right: 30px;       /* Distance from right */
+}</pre>
+
+        <!-- ===================== -->
+        <!-- FEATURES EXPLAINED -->
+        <!-- ===================== -->
+        <h2>✨ Key Features</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>🎯 Smart Keyword Matching</td>
+                    <td>Matches user questions to website content automatically</td>
+                </tr>
+                <tr>
+                    <td>⏱️ Typing Animation</td>
+                    <td>Shows realistic typing indicator while processing</td>
+                </tr>
+                <tr>
+                    <td>💾 Chat History</td>
+                    <td>Saves conversation history using browser localStorage</td>
+                </tr>
+                <tr>
+                    <td>📱 Mobile Responsive</td>
+                    <td>Works beautifully on phones, tablets, and desktops</td>
+                </tr>
+                <tr>
+                    <td>🎨 Modern UI</td>
+                    <td>ChatGPT-style design with smooth animations</td>
+                </tr>
+                <tr>
+                    <td>🌙 Dark Mode</td>
+                    <td>Automatically adapts to system dark mode preference</td>
+                </tr>
+                <tr>
+                    <td>🔒 No API Keys</td>
+                    <td>Works offline - no external dependencies needed</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- ===================== -->
+        <!-- ADVANCED CONFIGURATION -->
+        <!-- ===================== -->
+        <h2>⚙️ Advanced Configuration</h2>
+
+        <h3>Programmatic Control</h3>
+        <p>You can control the chatbot with JavaScript:</p>
+        <pre>// Toggle chat window
+window.kondeeAI.toggleChatWindow();
+
+// Send a message programmatically
+window.kondeeAI.sendMessage("What courses do you offer?");
+
+// Clear chat history
+window.kondeeAI.clearChatHistory();
+
+// Add a message manually
+window.kondeeAI.addMessageToChat("Hello!", "bot");</pre>
+
+        <h3>Customize Response Delay</h3>
+        <p>In <code>chatbot.js</code>, find the <code>sendMessage</code> function and adjust the timeout:</p>
+        <pre>setTimeout(() => {
+  // Currently: 600-1000ms delay
+  // Change to: 1000-1500ms for slower response
+}, 600 + Math.random() * 400);</pre>
+
+        <h3>Disable Chat History</h3>
+        <p>If you want to disable localStorage (for privacy), comment out these lines in <code>chatbot.js</code>:</p>
+        <pre>// this.saveChatHistory();   // Comment out
+// this.loadChatHistory();   // Comment out</pre>
+
+        <!-- ===================== -->
+        <!-- FAQ -->
+        <!-- ===================== -->
+        <h2>❓ Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                Q: The chatbot isn't appearing on my page. What's wrong?
+                <span>▼</span>
+            </div>
+            <div class="faq-answer">
+                <strong>A:</strong> Common issues:
+                <ul>
+                    <li>Make sure all 3 files (chatbot.js, chatbot-data.js, chatbot.css) are in the correct directory</li>
+                    <li>Check that the file paths in your script tags are correct</li>
+                    <li>Verify Font Awesome is loaded (needed for icons)</li>
+                    <li>Check browser console (F12) for JavaScript errors</li>
+                    <li>Clear browser cache and reload the page</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                Q: How do I add new content the chatbot can answer about?
+                <span>▼</span>
+            </div>
+            <div class="faq-answer">
+                <strong>A:</strong> Edit <code>chatbot-data.js</code>:
+                <ol>
+                    <li>Add a new section to the <code>websiteData</code> object</li>
+                    <li>Include title, keywords, and content</li>
+                    <li>Add keywords to the <code>keywordMap</code> that point to your new section</li>
+                    <li>Save and reload your page</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                Q: Can I integrate this with a real AI like ChatGPT or Google's API?
+                <span>▼</span>
+            </div>
+            <div class="faq-answer">
+                <strong>A:</strong> Yes! The current system uses keyword matching for reliability and cost-effectiveness. To add real AI:
+                <ol>
+                    <li>Replace the <code>generateBotResponse()</code> function in <code>chatbot.js</code></li>
+                    <li>Add API calls to OpenAI, Google, or other services</li>
+                    <li>Handle API keys securely (use a backend server, not frontend)</li>
+                    <li>Note: This requires a backend server and adds costs</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                Q: The button is covering my content. How do I move it?
+                <span>▼</span>
+            </div>
+            <div class="faq-answer">
+                <strong>A:</strong> Edit <code>chatbot.css</code> and find the <code>.chatbot-button</code> class:
+                <pre>.chatbot-button {
+  bottom: 30px;  /* Change this value */
+  right: 30px;   /* Or change this value */
+}</pre>
+                Increase the numbers to move it further away from the corner.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                Q: Can I customize the chat window appearance?
+                <span>▼</span>
+            </div>
+            <div class="faq-answer">
+                <strong>A:</strong> Yes! All styling is in <code>chatbot.css</code>. You can customize:
+                <ul>
+                    <li><strong>Colors:</strong> Edit the CSS variables at the top</li>
+                    <li><strong>Size:</strong> Modify <code>.chat-window</code> width/height</li>
+                    <li><strong>Fonts:</strong> Change the font-family declarations</li>
+                    <li><strong>Animations:</strong> Modify the @keyframes rules</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                Q: Does the chatbot work offline?
+                <span>▼</span>
+            </div>
+            <div class="faq-answer">
+                <strong>A:</strong> Almost! As long as your website is accessible, the chatbot works. It doesn't require any external APIs by default (unlike ChatGPT). Font Awesome icons need internet to load from CDN, but the chatbot functionality itself is completely local.
+            </div>
+        </div>
+
+        <!-- ===================== -->
+        <!-- TROUBLESHOOTING -->
+        <!-- ===================== -->
+        <h2>🔧 Troubleshooting</h2>
+
+        <div class="highlight">
+            <strong>Issue:</strong> Console shows "generateResponse is not defined"<br>
+            <strong>Solution:</strong> Make sure <code>chatbot-data.js</code> is loaded BEFORE <code>chatbot.js</code>
+        </div>
+
+        <div class="highlight">
+            <strong>Issue:</strong> Chat button doesn't respond to clicks<br>
+            <strong>Solution:</strong> Check that JavaScript isn't blocked. Verify console has no errors (F12).
+        </div>
+
+        <div class="highlight">
+            <strong>Issue:</strong> Styling looks wrong (button misaligned, etc.)<br>
+            <strong>Solution:</strong> Make sure other CSS isn't overriding chatbot CSS. Check for conflicting z-index values.
+        </div>
+
+        <div class="highlight">
+            <strong>Issue:</strong> Chat history isn't saving<br>
+            <strong>Solution:</strong> Browser localStorage might be disabled in incognito mode. Works fine in normal mode.
+        </div>
+
+        <!-- ===================== -->
+        <!-- CHECKLIST -->
+        <!-- ===================== -->
+        <h2>✅ Pre-Launch Checklist</h2>
+        <div class="step" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);">
+            <input type="checkbox"> All 3 chatbot files are uploaded to server
+            <br>
+            <input type="checkbox"> Script tags added to every HTML page
+            <br>
+            <input type="checkbox"> File paths are correct (no 404 errors)
+            <br>
+            <input type="checkbox"> Font Awesome is loaded on all pages
+            <br>
+            <input type="checkbox"> Tested on desktop, tablet, and mobile
+            <br>
+            <input type="checkbox"> Tested that chatbot responses are relevant
+            <br>
+            <input type="checkbox"> Updated <code>chatbot-data.js</code> with YOUR website content
+            <br>
+            <input type="checkbox"> Browser console shows no JavaScript errors
+            <br>
+            <input type="checkbox"> Chat history saves and loads correctly
+            <br>
+        </div>
+
+        <!-- ===================== -->
+        <!-- NEXT STEPS -->
+        <!-- ===================== -->
+        <h2>🚀 Next Steps & Enhancements</h2>
+        <ol>
+            <li><strong>Update Content:</strong> Edit chatbot-data.js with your course details, prices, etc.</li>
+            <li><strong>Test Thoroughly:</strong> Try asking various questions to ensure good responses</li>
+            <li><strong>Customize Colors:</strong> Match your brand colors in chatbot.css</li>
+            <li><strong>Monitor Usage:</strong> Add analytics to track user interactions</li>
+            <li><strong>Improve Keywords:</strong> Add more keywords as you see what users ask</li>
+            <li><strong>Add to Analytics:</strong> Track chatbot conversations with Google Analytics</li>
+            <li><strong>Consider:</strong> Adding email collection in chat for leads</li>
+            <li><strong>Future:</strong> Integrate with real AI and backend for advanced features</li>
+        </ol>
+
+        <div class="highlight">
+            <strong>💡 Pro Tip:</strong> Keep a log of questions users ask that the chatbot can't answer. Use this to improve your <code>chatbot-data.js</code> content!
+        </div>
+
+        <!-- ===================== -->
+        <!-- SUPPORT & CREDITS -->
+        <!-- ===================== -->
+        <div class="footer">
+            <h3>📞 Support & Credits</h3>
+            <p><strong>Created for:</strong> Your Website</p>
+            <p><strong>Chatbot Name:</strong> Kondee AI</p>
+            <p><strong>Features:</strong> Lightweight, fast, no dependencies</p>
+            <p style="margin-top: 20px; font-size: 0.9rem;">
+                This chatbot is designed to be simple, reliable, and easy to maintain.
+                Feel free to customize and expand it based on your needs!
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            answer.classList.toggle('show');
+            
+            const arrow = element.querySelector('span');
+            if (answer.classList.contains('show')) {
+                arrow.textContent = '▲';
+            } else {
+                arrow.textContent = '▼';
+            }
+        }
+    </script>
+</body>
+</html>

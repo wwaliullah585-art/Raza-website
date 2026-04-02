@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags for responsive design and character encoding -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="ABC123XYZ">
+    <title>Contact - Learn With Software Engineer</title>
+    
+    <!-- Bootstrap 5 CSS from CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome icons from CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom internal CSS -->
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .navbar {
+            background-color: #2c3e50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #3498db !important;
+        }
+        
+        .nav-link {
+            color: #ecf0f1 !important;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #3498db !important;
+            transform: translateY(-2px);
+        }
+        
+        .page-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        
+        .page-title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .section-padding {
+            padding: 80px 0;
+        }
+        
+        .btn-primary {
+            background-color: #3498db;
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+
+
+        /*-------------------------------------*/
+      Contact info card styling 
+        .contact-info-card {
+            text-align: center;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .contact-info-card i {
+            font-size: 2.5rem;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        .contact-info-card h5 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .contact-info-card p {
+            color: #7f8c8d;
+        }
+        
+       Form styling 
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.15);
+        }
+        
+        .form-control::placeholder {
+            color: #bdc3c7;
+        }
+        
+   Textarea specific styling 
+        textarea.form-control {
+            resize: vertical;
+            min-height: 150px;
+        }
+        
+      Submit button styling 
+        .btn-submit {
+            background-color: #3498db;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-submit:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-submit:active {
+            background-color: #1a5eaa;
+        }
+        
+     Form success/error message styling 
+        .form-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .form-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .form-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
+        Footer styling 
+        .footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 50px 0 20px;
+            margin-top: 80px;
+        }
+        
+        .social-link {
+            color: #3498db;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .social-link:hover {
+            color: #ecf0f1;
+            transform: translateY(-3px);
+        }
+        
+        .footer-text {
+            color: #95a5a6;
+        }
+        
+     Response time info styling 
+        .response-time {
+            background-color: #e3f2fd;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            color: #1565c0;
+        }
+    </style>
+    
+    <!-- Kondee AI Chatbot -->
+    <link rel="stylesheet" href="chatbot.css">
+    <script src="chatbot-data.js"></script>
+    <script src="chatbot.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <!-- NAVBAR SECTION -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-code"></i> Learn With Software Engineer
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="services.html">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="category.html">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog.html">Blog</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="portfolioDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Portfolio
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="portfolioDropdown">
+                            <li><a class="dropdown-item" href="data-science.html">Data Science</a></li>
+                            <li><a class="dropdown-item" href="data-analyst.html">Data Analyst</a></li>
+                            <li><a class="dropdown-item" href="app.html">AI Assistant</a></li>
+                             <li><a class="dropdown-item" href="portofolo.html">Project</a></li>
+                            <li><a class="dropdown-item" href="my-pdf.html">My PDFs</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE TITLE SECTION -->
+    <section class="page-title">
+        <div class="container">
+            <h1>Contact Us</h1>
+            <p>Get in touch for course inquiries, feedback, or partnerships</p>
+        </div>
+    </section>
+
+    <!-- CONTACT INFORMATION SECTION -->
+    <section class="section-padding">
+        <div class="container">
+            <!-- Contact info cards row -->
+            <div class="row g-4 mb-5">
+                <!-- Card 1: Email -->
+                <div class="col-md-4">
+                    <div class="contact-info-card">
+                        <i class="fas fa-envelope"></i>
+                        <h5>Email Address</h5>
+                        <p><a href="mailto:wwaliullah585@gmail.com" style="color: #3498db; text-decoration: none;">
+                            wwaliullah585@gmail.com
+                        </a></p>
+                        <p class="text-muted" style="font-size: 0.9rem;">We'll respond within 24 hours</p>
+                    </div>
+                </div>
+                
+                <!-- Card 2: Phone -->
+                <div class="col-md-4">
+                    <div class="contact-info-card">
+                        <i class="fas fa-phone"></i>
+                        <h5>Phone Number</h5>
+                        <p><a href="tel:03363200433" style="color: #3498db; text-decoration: none;">
+                           +92 336 320 0433
+                        </a></p>
+                        <p class="text-muted" style="font-size: 0.9rem;">Available Mon-Fri, 9AM-6PM</p>
+                    </div>
+                </div>
+                
+                <!-- Card 3: Office Address -->
+                <div class="col-md-4">
+                    <div class="contact-info-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h5>Office Location</h5>
+                        <p> Bannu miranshah<br>kpk province<br>pakistan</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTACT FORM SECTION -->
+            <div class="row mt-5">
+                <div class="col-md-8 mx-auto">
+                    <div style="background-color: #f8f9fa; padding: 40px; border-radius: 10px;">
+                        <h3 style="color: #2c3e50; font-weight: 700; margin-bottom: 10px;">Send us a Message</h3>
+                        <p class="text-muted mb-4">Have questions or feedback? Fill out the form below and we'll get back to you soon.</p>
+                        
+                        <!-- Form message placeholder (for showing success/error) -->
+                        <div id="formMessage" class="form-message"></div>
+                        
+                        <!-- Contact form - Emails sent directly to your Gmail -->
+                        <form id="contactForm" action="https://formsubmit.co/wwaliullah585@gmail.com" method="POST">
+                            <!-- FormSubmit security setting -->
+                            <input type="hidden" name="_captcha" value="false">
+                            <!-- Auto-respond to user -->
+                            <input type="hidden" name="_autoresponse" value="Thank you for contacting Learn With Software Engineer! We will get back to you soon.">
+                            <!-- Name field -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="name" 
+                                    name="name"
+                                    placeholder="Enter your full name" 
+                                    required
+                                >
+                            </div>
+                            
+                            <!-- Email field -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <input 
+                                    type="email" 
+                                    class="form-control" 
+                                    id="email" 
+                                    name="email"
+                                    placeholder="Enter your email address" 
+                                    required
+                                >
+                            </div>
+                            
+                            <!-- Phone field (optional) -->
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number (Optional)</label>
+                                <input 
+                                    type="tel" 
+                                    class="form-control" 
+                                    id="phone" 
+                                    name="phone"
+                                    placeholder="Enter your phone number" 
+                                >
+                            </div>
+                            
+                            <!-- Subject field -->
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Subject *</label>
+                                <select class="form-control" id="subject" name="subject" required>
+                                    <option value="">-- Select a subject --</option>
+                                    <option value="course-inquiry">Course Inquiry</option>
+                                    <option value="technical-support">Technical Support</option>
+                                    <option value="feedback">Feedback</option>
+                                    <option value="partnership">Partnership</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Message field -->
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message *</label>
+                                <textarea 
+                                    class="form-control" 
+                                    id="message" 
+                                    name="message"
+                                    placeholder="Enter your message here..." 
+                                    required
+                                ></textarea>
+                            </div>
+                            
+                            <!-- Checkbox: General inquiry -->
+                            <div class="mb-3 form-check">
+                                <input 
+                                    type="checkbox" 
+                                    class="form-check-input" 
+                                    id="subscribe" 
+                                    name="subscribe"
+                                >
+                                <label class="form-check-label" for="subscribe">
+                                    Subscribe to our newsletter for updates and new courses
+                                </label>
+                            </div>
+                            
+                            <!-- Response time info -->
+                            <div class="response-time">
+                                <i class="fas fa-info-circle"></i>
+                                We typically respond to inquiries within 24 business hours. Please provide valid contact information.
+                            </div>
+                            
+                            <!-- Submit button -->
+                            <button type="submit" class="btn-submit mt-4">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION - Frequently Asked Questions -->
+    <section class="section-padding" style="background-color: #f8f9fa;">
+        <div class="container">
+            <h2 style="color: #2c3e50; font-weight: 700; margin-bottom: 50px; text-align: center; font-size: 2.5rem;">
+                Frequently Asked Questions
+            </h2>
+            
+            <!-- FAQ items using Bootstrap accordion -->
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="accordion" id="faqAccordion">
+                        <!-- FAQ Item 1 -->
+                        <div class="accordion-item" style="border: 2px solid #ecf0f1;">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button 
+                                    class="accordion-button" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseOne" 
+                                    style="font-weight: 600; color: #2c3e50;"
+                                >
+                                    Do I need prior programming experience?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    No! All our courses are designed for beginners. We start from the very basics and 
+                                    gradually increase the difficulty level. Even if you have no coding experience, you can 
+                                    start with our Python Programming course.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 2 -->
+                        <div class="accordion-item" style="border: 2px solid #ecf0f1;">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button 
+                                    class="accordion-button collapsed" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseTwo" 
+                                    style="font-weight: 600; color: #2c3e50;"
+                                >
+                                    How long does each course take to complete?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Course duration varies depending on the course. Most courses range from 30-60 hours of video 
+                                    content. However, you can learn at your own pace with lifetime access, so you can complete them 
+                                    faster or slower based on your schedule.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 3 -->
+                        <div class="accordion-item" style="border: 2px solid #ecf0f1;">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button 
+                                    class="accordion-button collapsed" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseThree" 
+                                    style="font-weight: 600; color: #2c3e50;"
+                                >
+                                    What payment methods do you accept?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    We accept all major credit cards (Visa, Mastercard, American Express), PayPal, 
+                                    and bank transfers. We also offer special discounts for bulk purchases and corporate training.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 4 -->
+                        <div class="accordion-item" style="border: 2px solid #ecf0f1;">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button 
+                                    class="accordion-button collapsed" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseFour" 
+                                    style="font-weight: 600; color: #2c3e50;"
+                                >
+                                    Do you offer a refund policy?
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes! We offer a 30-day money-back guarantee. If you're not satisfied with the course within 
+                                    30 days of purchase, you can request a full refund. No questions asked!
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- FAQ Item 5 -->
+                        <div class="accordion-item" style="border: 2px solid #ecf0f1;">
+                            <h2 class="accordion-header" id="headingFive">
+                                <button 
+                                    class="accordion-button collapsed" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapseFive" 
+                                    style="font-weight: 600; color: #2c3e50;"
+                                >
+                                    Will I get a certificate after completing a course?
+                                </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes! Upon successfully completing any course, you'll receive a digital certificate that 
+                                    you can add to your resume and share on LinkedIn. Our certificates are recognized by many 
+                                    employers in the tech industry.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER SECTION -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-3">About Us</h5>
+                    <p class="footer-text">We provide quality education in programming and software engineering for everyone</p>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="footer-text text-decoration-none">Home</a></li>
+                        <li><a href="about.html" class="footer-text text-decoration-none">About</a></li>
+                        <li><a href="services.html" class="footer-text text-decoration-none">Services</a></li>
+                        <li><a href="blog.html" class="footer-text text-decoration-none">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-3">Categories</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="category.html" class="footer-text text-decoration-none">Python</a></li>
+                        <li><a href="category.html" class="footer-text text-decoration-none">Web Development</a></li>
+                        <li><a href="category.html" class="footer-text text-decoration-none">Data Science</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-3">Follow Us</h5>
+                    <a href="https://web.facebook.com/profile.php?id=61578725471951" class="social-link"><i class="fab fa-facebook"></i></a>
+                    <a href="https://github.com" class="social-link"><i class="fab fa-github"></i></a>
+                    <a href="https://www.linkedin.com/feed/" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://www.youtube.com/@learn_with_software_engineer" class="social-link"><i class="fab fa-youtube"></i></a>
+                    <a href="https://wa.me/923363200433" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <hr class="bg-secondary">
+            <div class="text-center footer-text">
+                <p>&copy; 2024 Learn With Software Engineer. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for form handling with Formspree -->
+    <script>
+        // JavaScript for form validation and Formspree integration
+        
+        // Get the form element
+        const contactForm = document.getElementById('contactForm');
+        const formMessage = document.getElementById('formMessage');
+        
+        // Add event listener for form submission
+        contactForm.addEventListener('submit', function(event) {
+            // Get form data for validation
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Validate that all required fields are filled
+            if (!name || !email || !subject || !message) {
+                event.preventDefault();
+                formMessage.textContent = 'Please fill in all required fields (marked with *)';
+                formMessage.className = 'form-message error';
+            } else {
+                // Show submitting message
+                formMessage.textContent = 'Submitting your message...';
+                formMessage.className = 'form-message success';
+                // Form will submit automatically to FormSubmit.co
+            }
+        });
+    </script>
+</body>
+</html>
